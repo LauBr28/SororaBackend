@@ -125,4 +125,27 @@ public class UserImpl implements UserService {
     }
 
 
+
+    @Override
+    public UserDto getUserProfileWithUserDetails(Integer userId) {
+        Optional<User> userOptional = userRepo.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            // Construir UserDto a partir de User y UserProfileDto
+            UserProfileDto userProfileDto = getUserProfile(userId);
+            UserDto userDto = UserDto.builder()
+                    .id(user.getId())
+                    .username(user.getUsername())
+                    .firstname(user.getFirstname())
+                    .lastname(user.getLastname())
+                    .email(user.getEmail())
+                    .userProfileDto(userProfileDto)
+                    .build();
+            return userDto;
+        } else {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+    }
+
+
 }

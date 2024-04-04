@@ -40,11 +40,11 @@ public class UserController {
         return ResponseEntity.ok("Profile updated successfully");
     
     }
-    
+
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam Integer userId) {
-        // Lógica para obtener y devolver los datos del perfil del usuario
-        UserProfileDto userProfileDto = userService.getUserProfile(userId); // Suponiendo que tienes un método en UserService para obtener el perfil del usuario
-        return ResponseEntity.ok(userProfileDto);
+     //   UserProfileDto userProfileDto = userService.getUserProfile(userId); 
+        UserDto userDto = userService.getUserProfileWithUserDetails(userId);
+        return ResponseEntity.ok(userDto);
     }
 }
