@@ -12,5 +12,5 @@ public interface UserService {
     LoginResponse loginUser(LoginDto loginDTO);
     void updateUserProfile(UserProfileDto userProfileDto);
     UserProfileDto getUserProfile(Integer userId);
-   // UserDto getUserProfileWithUserDetails(Integer userId);
+    UserDto getUserProfileWithUserDetails(Integer userId);
 }

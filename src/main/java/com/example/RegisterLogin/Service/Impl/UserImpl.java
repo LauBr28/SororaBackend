@@ -130,23 +130,21 @@ public class UserImpl implements UserService {
         Optional<User> userOptional = userRepo.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            // Construir UserDto a partir de User y UserProfileDto
-            UserProfileDto userProfileDto = getUserProfile(userId);
-            UserDto userDto = UserDto.builder()
-                    .id(user.getId())
-                    .username(user.getUsername())
-                    .firstname(user.getFirstname())
-                    .lastname(user.getLastname())
-                    .email(user.getEmail())
-                    .userProfileDto(userProfileDto)
-                    .build();
+            UserProfileDto userProfileDto = getUserProfile(userId); // Obtener el UserProfileDto
+            
+            // Crear un nuevo UserDto combinando la información del usuario y su perfil
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setUsername(user.getUsername());
+            userDto.setFirstname(user.getFirstname());
+            userDto.setLastname(user.getLastname());
+            userDto.setEmail(user.getEmail());
+            userDto.setUserProfileDto(userProfileDto); // Establecer el UserProfileDto
+            
             return userDto;
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     }
-
-
-
 
 }
