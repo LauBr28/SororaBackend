@@ -42,6 +42,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam Integer userId) {
+<<<<<<< HEAD
         // UserProfileDto userProfileDto = userService.getUserProfile(userId);
         UserDto userDto = userService.getUserProfileWithUserDetails(userId);
         return ResponseEntity.ok(userDto);
@@ -52,4 +53,11 @@ public class UserController {
         List<UserDto> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
+=======
+       UserDto userDto = userService.getUserProfileWithUserDetails(userId);
+       return ResponseEntity.ok(userDto);
+    }
+
+    
+>>>>>>> origin/lau
 }
