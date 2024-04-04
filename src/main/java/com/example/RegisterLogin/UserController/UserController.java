@@ -41,6 +41,8 @@ public class UserController {
     
     }
 
+    
+
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam Integer userId) {
        UserDto userDto = userService.getUserProfileWithUserDetails(userId);

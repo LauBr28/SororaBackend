@@ -125,6 +125,7 @@ public class UserImpl implements UserService {
     }
 
     
+    
     @Override
     public UserDto getUserProfileWithUserDetails(Integer userId) {
         Optional<User> userOptional = userRepo.findById(userId);
