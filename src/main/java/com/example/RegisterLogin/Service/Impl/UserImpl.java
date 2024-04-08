@@ -128,6 +128,7 @@ public class UserImpl implements UserService {
     }
 
     
+    
     @Override
     public UserDto getUserProfileWithUserDetails(Integer userId) {
         Optional<User> userOptional = userRepo.findById(userId);
@@ -149,6 +150,8 @@ public class UserImpl implements UserService {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     }
+
+
     public UserDto convertToDto(User user) {
         UserDto.UserDtoBuilder userDtoBuilder = UserDto.builder()
                 .id(user.getId())
@@ -181,5 +184,6 @@ public class UserImpl implements UserService {
         List<User> userList = userRepo.findAll();
         return userList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+
 
 }
