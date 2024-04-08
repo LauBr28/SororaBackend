@@ -1,6 +1,8 @@
 package com.example.RegisterLogin.Service.Impl;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -147,5 +149,39 @@ public class UserImpl implements UserService {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     }
+
+    public UserDto convertToDto(User user) {
+        UserDto.UserDtoBuilder userDtoBuilder = UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail());
+    
+        if (user.getUserProfile() != null) {
+            // Crear un UserProfileDto a partir del UserProfile
+            UserProfile userProfile = user.getUserProfile();
+            UserProfileDto userProfileDto = new UserProfileDto();
+            userProfileDto.setUserId(userProfile.getId());
+            userProfileDto.setDescription(userProfile.getDescription());
+            userProfileDto.setProfilePictureUrl(userProfile.getProfilePictureUrl());
+            
+            userDtoBuilder.userProfileDto(userProfileDto); // Agregar el UserProfileDto al UserDto si existe
+        } else {
+            // Si el perfil no existe, asignar un perfil vacío
+            UserProfileDto userProfileDto = new UserProfileDto();
+            userDtoBuilder.userProfileDto(userProfileDto); // Agregar el perfil vacío al UserDto
+        }
+    
+        return userDtoBuilder.build();
+    }
+    
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> userList = userRepo.findAll();
+        return userList.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
 
 }

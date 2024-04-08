@@ -5,6 +5,7 @@ import com.example.RegisterLogin.Response.LoginResponse;
 import com.example.RegisterLogin.Dto.LoginDto;
 import com.example.RegisterLogin.Service.UserService;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,13 +42,18 @@ public class UserController {
     
     }
 
-    
-
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile(@RequestParam Integer userId) {
        UserDto userDto = userService.getUserProfileWithUserDetails(userId);
        return ResponseEntity.ok(userDto);
     }
 
-    
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> allUsers = userService.getAllUsers();
+        return ResponseEntity.ok(allUsers);
+    }
+
+
+
 }
