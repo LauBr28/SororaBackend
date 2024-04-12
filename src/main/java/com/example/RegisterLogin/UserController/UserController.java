@@ -53,7 +53,4 @@ public class UserController {
         List<UserDto> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
-
-
-
 }
