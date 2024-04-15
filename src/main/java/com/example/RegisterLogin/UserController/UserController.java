@@ -53,4 +53,17 @@ public class UserController {
         List<UserDto> allUsers = userService.getAllUsers();
         return ResponseEntity.ok(allUsers);
     }
+
+    @PostMapping("/connect/{userId}/{friendId}")
+    public ResponseEntity<String> connectUsersAsFriends(@PathVariable int userId, @PathVariable int friendId) {
+        userService.connectUsersAsFriends(userId, friendId);
+        return ResponseEntity.ok("Usuarios conectados como amigos exitosamente.");
+    }
+
+    @GetMapping("/friends")
+    public ResponseEntity<List<UserDto>> getFriendsByUserId(@RequestParam int userId) {
+        List<UserDto> friends = userService.getFriendsByUserId(userId);
+        return ResponseEntity.ok(friends);
+    }
+
 }

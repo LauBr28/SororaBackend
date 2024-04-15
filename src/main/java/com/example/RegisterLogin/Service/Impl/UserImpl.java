@@ -14,6 +14,7 @@ import com.example.RegisterLogin.Dto.UserProfileDto;
 import com.example.RegisterLogin.Entity.User;
 import com.example.RegisterLogin.Entity.UserProfile;
 import com.example.RegisterLogin.Repo.UserRepo;
+import com.example.RegisterLogin.Repo.FriendshipRepo;
 import com.example.RegisterLogin.Repo.UserProfileRepo;
 import com.example.RegisterLogin.Response.LoginResponse;
 import com.example.RegisterLogin.Service.UserService;
@@ -29,6 +30,10 @@ public class UserImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FriendshipRepo friendshipRepo;
+
 
     @Override
     public String addUser(UserDto userDto) {
@@ -182,4 +187,16 @@ public class UserImpl implements UserService {
         List<User> userList = userRepo.findAll();
         return userList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+
+    @Override
+    public void connectUsersAsFriends(int userId, int friendId) {
+        friendshipRepo.addFriend(userId, friendId);
+    }
+
+    @Override
+    public List<UserDto> getFriendsByUserId(int userId) {
+        List<User> friends = friendshipRepo.findFriendsByUserId(userId);
+        return friends.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
 }

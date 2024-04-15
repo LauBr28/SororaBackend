@@ -16,4 +16,6 @@ public interface UserService {
     UserProfileDto getUserProfile(Integer userId);
     UserDto getUserProfileWithUserDetails(Integer userId);
     List<UserDto> getAllUsers();
+    void connectUsersAsFriends(int userId, int friendId);
+    List<UserDto> getFriendsByUserId(int userId);
 }
