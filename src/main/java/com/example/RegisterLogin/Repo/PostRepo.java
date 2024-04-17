@@ -37,9 +37,4 @@ public interface PostRepo extends JpaRepository<Post, Integer> {
     @Query("UPDATE Post p SET p.likes = p.likes + 1 WHERE p.id = :postId")
     void likePost(@Param("postId") int postId);
 
-    // Reportar un post por su ID
-    @Modifying
-    @Transactional
-    @Query("UPDATE Post p SET p.reported = true WHERE p.id = :postId")
-    void reportPost(@Param("postId") int postId);
 }

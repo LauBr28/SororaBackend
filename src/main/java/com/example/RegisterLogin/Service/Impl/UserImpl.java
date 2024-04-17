@@ -224,11 +224,6 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public void reportPost(int postId) {
-        postRepo.reportPost(postId);
-    }
-
-    @Override
     public Optional<Post> getPostById(int id) {
         return postRepo.findById(id);
     }

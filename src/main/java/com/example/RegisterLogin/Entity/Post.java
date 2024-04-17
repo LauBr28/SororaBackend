@@ -19,7 +19,7 @@ import java.util.List;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -29,7 +29,7 @@ public class Post {
     private String content;
 
     @Column(name = "likes")
-    private int likes;
+    private Integer likes;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

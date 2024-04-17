@@ -92,11 +92,7 @@ public class UserController {
         return ResponseEntity.ok("Post liked successfully");
     }
 
-    @PatchMapping("/reportPost/{postId}")
-    public ResponseEntity<String> reportPost(@PathVariable int postId) {
-        userService.reportPost(postId);
-        return ResponseEntity.ok("Post reported successfully");
-    }
+  
 
     @GetMapping("FindPost/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable int id) {

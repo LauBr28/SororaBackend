@@ -26,6 +26,6 @@ public interface UserService {
     Post editPost(Post post);
     void deletePost(int id);
     void likePost(int postId);
-    void reportPost(int postId);
+  
     Optional<Post> getPostById(int id);
 }
