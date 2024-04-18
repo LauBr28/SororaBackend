@@ -6,15 +6,13 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.JoinColumn;
 
-import java.util.HashSet;
-import java.util.Set;
+
+
 
 import jakarta.persistence.CascadeType;
 import lombok.AllArgsConstructor;
@@ -27,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 @Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User {
     @Id
@@ -49,14 +48,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile userProfile;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "friendship",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
-    private Set<User> friends = new HashSet<>();
-
+ 
     public User(int id, String username, String firstname, String lastname, String email, String password) {
         this.id = id;
         this.username = username;
