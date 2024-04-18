@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.RegisterLogin.Entity.UserProfile;
 
 @Repository
-public interface UserProfileRepo extends JpaRepository<UserProfile, Long> {
+public interface UserProfileRepo extends JpaRepository<UserProfile, Integer> {
     // Aquí puedes agregar métodos personalizados de ser necesario
     Optional<UserProfile> findByUserId(Integer userId);
 }
