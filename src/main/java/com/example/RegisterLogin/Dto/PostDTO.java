@@ -3,8 +3,6 @@ package com.example.RegisterLogin.Dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -16,8 +14,8 @@ public class PostDTO {
     private int postId;
     private int userId; // Id del usuario que subió el post
     private String username; // Nombre de usuario
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    private String title;
+    private String content;
     private LocalDateTime dateTime; // Fecha y hora de subida del post
     private int likes; // Número de likes
     private List<CommentDto> comments; // Lista de comentarios
@@ -36,8 +34,25 @@ public class PostDTO {
     public String getUsername() {
         return username;
     }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public String getContent(){
+        return content;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content){
+        this.content = content;
     }
     public LocalDateTime getDateTime() {
         return dateTime;

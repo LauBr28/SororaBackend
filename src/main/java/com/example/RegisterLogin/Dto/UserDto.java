@@ -17,4 +17,5 @@ public class UserDto {
     String email;
     String password;
     UserProfileDto userProfileDto;
+    
 }
