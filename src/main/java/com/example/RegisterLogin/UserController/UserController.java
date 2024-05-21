@@ -149,5 +149,30 @@ public class UserController {
         }
     }
 
+    // Actualizar un post existente
+@PostMapping("/post/update/{postId}")
+public ResponseEntity<String> updatePost(@PathVariable int postId, @RequestBody PostDTO postDto) {
+    try {
+        userService.updatePost(postId, postDto);
+        return ResponseEntity.ok("Post updated successfully");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error updating post: " + e.getMessage());
+    }
+}
+
+// Eliminar un post existente
+@DeleteMapping("/post/delete/{postId}")
+public ResponseEntity<String> deletePost(@PathVariable int postId) {
+    try {
+        userService.deletePost(postId);
+        return ResponseEntity.ok("Post deleted successfully");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error deleting post: " + e.getMessage());
+    }
+}
+
+
 
 }

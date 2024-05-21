@@ -30,4 +30,10 @@ public interface UserService {
     List<PostDTO> getAllPosts(); // Método para obtener todos los posts
     void addCommentToPost(int postId, CommentDto commentDto); // Método para agregar un comentario a un post
     void likePost(int postId);
+
+     // Método para actualizar un post existente
+     void updatePost(int postId, PostDTO postDto);
+
+     // Método para eliminar un post existente
+     void deletePost(int postId);
 }

@@ -337,4 +337,30 @@ public class UserImpl implements UserService {
         postRepo.save(post);
     }
 
+    @Override
+    public void updatePost(int postId, PostDTO postDto) {
+        // Obtener el post existente por su ID
+        Post existingPost = postRepo.findById(postId)
+                                    .orElseThrow(() -> new RuntimeException("Post not found with ID: " + postId));
+
+        // Actualizar el título y contenido del post
+        existingPost.setTitle(postDto.getTitle());
+        existingPost.setContent(postDto.getContent());
+
+        // Guardar los cambios en el post
+        postRepo.save(existingPost);
+    }
+
+    @Override
+    public void deletePost(int postId) {
+        // Verificar si el post existe
+        if (postRepo.existsById(postId)) {
+            // Eliminar el post por su ID
+            postRepo.deleteById(postId);
+        } else {
+            throw new RuntimeException("Post not found with ID: " + postId);
+        }
+    }
+
+
 }
