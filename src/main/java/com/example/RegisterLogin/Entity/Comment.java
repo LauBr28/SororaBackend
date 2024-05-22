@@ -1,9 +1,7 @@
 package com.example.RegisterLogin.Entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,15 +21,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "post")
-public class Post {
+@Table(name = "comment")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postId;
+    private int commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @Column(name = "user_id")
+    private int userId;
 
     @Column(name = "username")
     private String username;
@@ -40,17 +40,8 @@ public class Post {
     @Column(name = "datetime")
     private LocalDateTime dateTime;
 
-    @Column(name = "title", length = 1000)
-    private String title;
-
     @Column(name = "content", length = 1000)
     private String content;
-
-    @Column(name = "likes")
-    private int likes;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
 
     // Getters and setters omitted for brevity
 }

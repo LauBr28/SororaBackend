@@ -39,8 +39,6 @@ public class LoginResponse {
         this.id = id;
     }
 
-
-
     @Override
     public String toString() {
         return "LoginResponse{" +
@@ -48,5 +46,4 @@ public class LoginResponse {
                 ", status=" + status +
                 '}';
     }
-
 }

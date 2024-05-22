@@ -18,5 +18,4 @@ public class CommentDto {
     private LocalDateTime dateTime; // Fecha y hora del comentario
     private String content; // Contenido del comentario
 
-    
 }

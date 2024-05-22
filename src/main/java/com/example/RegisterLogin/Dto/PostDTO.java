@@ -14,6 +14,8 @@ public class PostDTO {
     private int postId;
     private int userId; // Id del usuario que subió el post
     private String username; // Nombre de usuario
+    private String title;
+    private String content;
     private LocalDateTime dateTime; // Fecha y hora de subida del post
     private int likes; // Número de likes
     private List<CommentDto> comments; // Lista de comentarios
@@ -32,8 +34,25 @@ public class PostDTO {
     public String getUsername() {
         return username;
     }
+
+    public String getTitle(){
+        return title;
+    }
+
+    public String getContent(){
+        return content;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content){
+        this.content = content;
     }
     public LocalDateTime getDateTime() {
         return dateTime;
@@ -55,4 +74,3 @@ public class PostDTO {
     }
 
 }
-
