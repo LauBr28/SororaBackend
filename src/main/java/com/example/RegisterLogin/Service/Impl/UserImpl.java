@@ -361,6 +361,14 @@ public class UserImpl implements UserService {
             throw new RuntimeException("Post not found with ID: " + postId);
         }
     }
+    
+    @Override
+    public PostDTO getPostById(int postId) {
+        Post post = postRepo.findById(postId)
+                            .orElseThrow(() -> new RuntimeException("Post not found with ID: " + postId));
+        return convertToPostDto(post);
+    }
+
 
 
 }

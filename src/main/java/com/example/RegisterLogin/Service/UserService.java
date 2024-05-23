@@ -36,4 +36,5 @@ public interface UserService {
 
      // Método para eliminar un post existente
      void deletePost(int postId);
+     PostDTO getPostById(int postId);
 }
