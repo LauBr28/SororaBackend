@@ -80,17 +80,7 @@ public class UserController {
     }
 
     
-    @PostMapping("/post/create")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDto) {
-        PostDTO createdPost = userService.createPost(postDto);
-        return ResponseEntity.ok(createdPost);
-    }
-
-    @GetMapping("/posts/all")
-    public ResponseEntity<List<PostDTO>> getAllPosts() {
-        List<PostDTO> allPosts = userService.getAllPosts();
-        return ResponseEntity.ok(allPosts);
-    }
+   
 
     @PostMapping("/location")
     public ResponseEntity<String> saveUserLocation(@RequestBody MapaDto mapaDto) {
@@ -136,6 +126,17 @@ public class UserController {
     public ResponseEntity<List<MapaDto>> getAllMapaDetails() {
         List<MapaDto> mapaDetails = userService.getAllMapaDetails();
         return ResponseEntity.ok(mapaDetails);
+    }
+    @PostMapping("/post/create")
+    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDto) {
+        PostDTO createdPost = userService.createPost(postDto);
+        return ResponseEntity.ok(createdPost);
+    }
+
+    @GetMapping("/posts/all")
+    public ResponseEntity<List<PostDTO>> getAllPosts() {
+        List<PostDTO> allPosts = userService.getAllPosts();
+        return ResponseEntity.ok(allPosts);
     }
 
     @PostMapping("/post/like/{postId}")

@@ -18,59 +18,70 @@ public class PostDTO {
     private String content;
     private LocalDateTime dateTime; // Fecha y hora de subida del post
     private int likes; // Número de likes
-    private List<CommentDto> comments; // Lista de comentarios
+    private List<PostDTO> comments; // Lista de comentarios (que son de tipo PostDTO)
+
+    // Getters y setters omitidos para brevedad
     public int getPostId() {
         return postId;
     }
+
     public void setPostId(int postId) {
         this.postId = postId;
     }
+
     public int getUserId() {
         return userId;
     }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
     public String getUsername() {
         return username;
-    }
-
-    public String getTitle(){
-        return title;
-    }
-
-    public String getContent(){
-        return content;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setContent(String content){
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
+
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
+
     public int getLikes() {
         return likes;
     }
+
     public void setLikes(int likes) {
         this.likes = likes;
     }
-    public List<CommentDto> getComments() {
+
+    public List<PostDTO> getComments() {
         return comments;
     }
-    public void setComments(List<CommentDto> comments) {
+
+    public void setComments(List<PostDTO> comments) {
         this.comments = comments;
     }
-
 }

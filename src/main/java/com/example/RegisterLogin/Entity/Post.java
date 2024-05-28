@@ -51,8 +51,12 @@ public class Post {
     @Column(name = "likes")
     private int likes;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "parentPost", cascade = CascadeType.ALL)
+    private List<Post> comments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_post_id")
+    private Post parentPost;
 
     // Getters and setters omitted for brevity
 }
