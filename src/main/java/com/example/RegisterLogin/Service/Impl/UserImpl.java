@@ -16,10 +16,12 @@ import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
 import com.example.RegisterLogin.Entity.User;
 import com.example.RegisterLogin.Entity.UserProfile;
+import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Entity.Post;
 import com.example.RegisterLogin.Repo.UserRepo;
 import com.example.RegisterLogin.Repo.CommentRepo;
+import com.example.RegisterLogin.Repo.FriendRequestRepository;
 import com.example.RegisterLogin.Repo.FriendshipRepo;
 import com.example.RegisterLogin.Repo.UserProfileRepo;
 import com.example.RegisterLogin.Repo.MapaRepo;
@@ -52,6 +54,8 @@ public class UserImpl implements UserService {
     @Autowired
     private CommentRepo commentRepo;
 
+    @Autowired
+    private FriendRequestRepository friendRequestRepository;
 
     @Override
     public String addUser(UserDto userDto) {
@@ -218,10 +222,6 @@ public class UserImpl implements UserService {
         return userList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    @Override
-    public void connectUsersAsFriends(int userId, int friendId) {
-        friendshipRepo.addFriend(userId, friendId);
-    }
 
     @Override
     public List<UserDto> getFriendsByUserId(int userId) {
@@ -369,6 +369,55 @@ public class UserImpl implements UserService {
         return convertToPostDto(post);
     }
 
+    @Override
+    public Long sendFriendRequest(Long senderId, Long receiverId) {
+        // Verificar si los usuarios existen
+        User sender = userRepo.findById(senderId).orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+        User receiver = userRepo.findById(receiverId).orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
+    
+        // Verificar si ya existe una solicitud de amistad pendiente entre los usuarios
+        if (friendRequestRepository.existsBySenderIdAndReceiverId(senderId, receiverId)) {
+            throw new IllegalStateException("Ya existe una solicitud de amistad pendiente entre estos usuarios");
+        }
+    
+        // Crear la solicitud de amistad
+        FriendRequest friendRequest = new FriendRequest(senderId, receiverId);
+        friendRequestRepository.save(friendRequest);
+
+         // Retornar el ID de la solicitud de amistad
+        return friendRequest.getId();
+        
+    }
+    
+
+    @Override
+    public void acceptFriendRequest(Long requestId) {
+        try {
+            // Verificar si la solicitud de amistad existe
+            FriendRequest request = friendRequestRepository.findById(requestId)
+                    .orElseThrow(() -> new IllegalArgumentException("Friend request not found"));
+    
+            // Añadir a los usuarios como amigos (bidireccional)
+            friendshipRepo.addFriend(request.getSenderId(), request.getReceiverId());
+            friendshipRepo.addFriend(request.getReceiverId(), request.getSenderId());
+    
+            // Eliminar la solicitud de amistad
+            friendRequestRepository.delete(request);
+        } catch (Exception e) {
+            // Log de error detallado
+            System.err.println("Error accepting friend request: " + e.getMessage());
+            e.printStackTrace();
+            throw e;  // Lanza la excepción para que pueda ser manejada por el controlador
+        }
+    }
+    
+    
+    @Override
+    public List<FriendRequest> getPendingFriendRequests(Long userId) {
+        // Obtener las solicitudes de amistad pendientes para el usuario dado
+        return friendRequestRepository.findByReceiverId(userId);
+    }
 
 
 }
+

@@ -6,6 +6,7 @@ import com.example.RegisterLogin.Dto.CommentDto;
 import com.example.RegisterLogin.Dto.LoginDto;
 import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
+import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Dto.MapaDto;
 import com.example.RegisterLogin.Dto.PostDTO;
@@ -18,7 +19,6 @@ public interface UserService {
     UserProfileDto getUserProfile(Integer userId);
     UserDto getUserProfileWithUserDetails(Integer userId);
     List<UserDto> getAllUsers();
-    void connectUsersAsFriends(int userId, int friendId);
     List<UserDto> getFriendsByUserId(int userId);
     Optional<MapaDto> getMapaByUserId(int userId);
     List<MapaDto> getFriendsLocationByUserId(int userId); 
@@ -37,4 +37,8 @@ public interface UserService {
      // Método para eliminar un post existente
      void deletePost(int postId);
      PostDTO getPostById(int postId);
+
+     Long sendFriendRequest(Long senderId, Long receiverId);
+     void acceptFriendRequest(Long requestId);
+     List<FriendRequest> getPendingFriendRequests(Long userId);
 }

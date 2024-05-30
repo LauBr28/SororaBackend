@@ -13,7 +13,7 @@ public interface FriendshipRepo extends JpaRepository<Friendship, Long> {
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO friendship (user_id, friend_id) VALUES (:userId, :friendId)", nativeQuery = true)
-    void addFriend(@Param("userId") int userId, @Param("friendId") int friendId);
+    void addFriend(@Param("userId") Long userId, @Param("friendId") Long friendId);
 
     @Query("SELECT f.friend FROM Friendship f WHERE f.user.id = :userId")
     List<User> findFriendsByUserId(@Param("userId") int userId);

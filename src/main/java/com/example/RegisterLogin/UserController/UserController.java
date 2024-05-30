@@ -1,6 +1,7 @@
 package com.example.RegisterLogin.UserController;
 import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
+import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Response.LoginResponse;
 
@@ -8,7 +9,10 @@ import com.example.RegisterLogin.Dto.LoginDto;
 import com.example.RegisterLogin.Dto.MapaDto;
 import com.example.RegisterLogin.Dto.PostDTO;
 import com.example.RegisterLogin.Service.UserService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -60,11 +64,6 @@ public class UserController {
         return ResponseEntity.ok(allUsers);
     }
 
-    @PostMapping("/connect/{userId}/{friendId}")
-    public ResponseEntity<String> connectUsersAsFriends(@PathVariable int userId, @PathVariable int friendId) {
-        userService.connectUsersAsFriends(userId, friendId);
-        return ResponseEntity.ok("Usuarios conectados como amigos exitosamente.");
-    }
     
     @GetMapping("/friends")
     public ResponseEntity<List<UserDto>> getFriendsByUserId(@RequestParam int userId) {
@@ -180,5 +179,39 @@ public class UserController {
         return ResponseEntity.ok(postDto);
     }
 
+    @PostMapping("/friendRequest/send/{senderId}/{receiverId}")
+    public ResponseEntity<Map<String, Long>> sendFriendRequest(@PathVariable Long senderId, @PathVariable Long receiverId) {
+        try {
+            Long requestId = userService.sendFriendRequest(senderId, receiverId);
+            Map<String, Long> response = new HashMap<>();
+            response.put("requestId", requestId);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
+
+   @PostMapping("/friendRequest/accept/{requestId}")
+   public ResponseEntity<String> acceptFriendRequest(@PathVariable Long requestId) {
+       try {
+           userService.acceptFriendRequest(requestId);
+           return ResponseEntity.ok("Friend request accepted successfully");
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body("Error accepting friend request: " + e.getMessage());
+       }
+   }
+   
+
+   // Ruta para obtener solicitudes de amistad pendientes
+   @GetMapping("/friendRequest/pending/{userId}")
+   public ResponseEntity<List<FriendRequest>> getPendingFriendRequests(@PathVariable Long userId) {
+       try {
+           List<FriendRequest> pendingRequests = userService.getPendingFriendRequests(userId);
+           return ResponseEntity.ok(pendingRequests);
+       } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+       }
+   }
 }
