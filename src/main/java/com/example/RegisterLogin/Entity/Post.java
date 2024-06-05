@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,9 +17,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
 
 @Data
 @Builder
@@ -51,12 +50,6 @@ public class Post {
     @Column(name = "likes")
     private int likes;
 
-    @OneToMany(mappedBy = "parentPost", cascade = CascadeType.ALL)
-    private List<Post> comments;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_post_id")
-    private Post parentPost;
-
-    // Getters and setters omitted for brevity
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }

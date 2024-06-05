@@ -5,8 +5,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.RegisterLogin.Dto.CommentDto;
 import com.example.RegisterLogin.Dto.LoginDto;
@@ -16,6 +18,7 @@ import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
 import com.example.RegisterLogin.Entity.User;
 import com.example.RegisterLogin.Entity.UserProfile;
+import com.example.RegisterLogin.Entity.Comment;
 import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Entity.Post;
@@ -28,7 +31,6 @@ import com.example.RegisterLogin.Repo.MapaRepo;
 import com.example.RegisterLogin.Repo.PostRepo;
 import com.example.RegisterLogin.Response.LoginResponse;
 import com.example.RegisterLogin.Service.UserService;
-
 
 @Service
 public class UserImpl implements UserService {
@@ -319,15 +321,6 @@ public class UserImpl implements UserService {
         // postDto.setComments(convertCommentListToDto(post.getComments()));
         return postDto;
     }
-    @Override
-    public void addCommentToPost(int postId, CommentDto commentDto) {
-        // Llamar al método personalizado addComment en CommentRepo para agregar un comentario
-        commentRepo.addComment(postId,
-                               commentDto.getUserId(),
-                               commentDto.getUsername(),
-                               commentDto.getDateTime(),
-                               commentDto.getContent());
-    }
 
     @Override
     public void likePost(int postId) {
@@ -368,6 +361,69 @@ public class UserImpl implements UserService {
                             .orElseThrow(() -> new RuntimeException("Post not found with ID: " + postId));
         return convertToPostDto(post);
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+        public class ResourceNotFoundException extends RuntimeException {
+            public ResourceNotFoundException(String message) {
+                super(message);
+            }
+        }
+
+
+      @Override
+    public Comment createComment(int postId, CommentDto commentDto) {
+        Post post = postRepo.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
+        
+        Comment comment = new Comment();
+        comment.setPost(post);
+        comment.setUserId(commentDto.getUserId());
+        comment.setUsername(commentDto.getUsername());
+        comment.setDateTime(LocalDateTime.now());
+        comment.setContent(commentDto.getContent());
+        commentDto.setLikes(comment.getLikes()); 
+        commentDto.setLikes(0);
+        return commentRepo.save(comment);
+    }
+
+    @Override
+    public Comment updateComment(int commentId, CommentDto commentDto) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId));
+        
+        comment.setContent(commentDto.getContent());
+        return commentRepo.save(comment);
+    }
+
+    @Override
+    public void deleteComment(int commentId) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId));
+        
+        commentRepo.delete(comment);
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPostId(int postId) {
+        Post post = postRepo.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id " + postId));
+        
+        List<Comment> comments = commentRepo.findByPost(post);
+        return comments.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    private CommentDto convertToDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setCommentId(comment.getCommentId());
+        commentDto.setPostId(comment.getPost().getPostId());
+        commentDto.setUserId(comment.getUserId());
+        commentDto.setUsername(comment.getUsername());
+        commentDto.setDateTime(comment.getDateTime());
+        commentDto.setContent(comment.getContent());
+      
+        return commentDto;
+    }
+
 
     @Override
     public Long sendFriendRequest(Long senderId, Long receiverId) {
@@ -418,6 +474,20 @@ public class UserImpl implements UserService {
         return friendRequestRepository.findByReceiverId(userId);
     }
 
+    @Override
+    public String getUsernameByUserId(int userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        return user.getUsername();
+    }
+
+    @Override
+    public void likeComment(int commentId) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found with ID: " + commentId));
+        comment.setLikes(comment.getLikes() + 1);
+        commentRepo.save(comment);
+    }
 
 }
 

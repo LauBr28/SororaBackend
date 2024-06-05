@@ -17,5 +17,5 @@ public class CommentDto {
     private String username; // Nombre de usuario del que hizo el comentario
     private LocalDateTime dateTime; // Fecha y hora del comentario
     private String content; // Contenido del comentario
-
+    private int likes; //
 }

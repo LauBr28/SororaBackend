@@ -1,10 +1,11 @@
 package com.example.RegisterLogin.UserController;
 import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
+import com.example.RegisterLogin.Entity.Comment;
 import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Response.LoginResponse;
-
+import com.example.RegisterLogin.Dto.CommentDto;
 import com.example.RegisterLogin.Dto.LoginDto;
 import com.example.RegisterLogin.Dto.MapaDto;
 import com.example.RegisterLogin.Dto.PostDTO;
@@ -77,9 +78,6 @@ public class UserController {
         List<MapaDto> friendsLocation = userService.getFriendsLocationByUserId(userId);
         return ResponseEntity.ok(friendsLocation);
     }
-
-    
-   
 
     @PostMapping("/location")
     public ResponseEntity<String> saveUserLocation(@RequestBody MapaDto mapaDto) {
@@ -191,7 +189,6 @@ public class UserController {
         }
     }
 
-
    @PostMapping("/friendRequest/accept/{requestId}")
    public ResponseEntity<String> acceptFriendRequest(@PathVariable Long requestId) {
        try {
@@ -203,7 +200,6 @@ public class UserController {
        }
    }
    
-
    // Ruta para obtener solicitudes de amistad pendientes
    @GetMapping("/friendRequest/pending/{userId}")
    public ResponseEntity<List<FriendRequest>> getPendingFriendRequests(@PathVariable Long userId) {
@@ -214,4 +210,66 @@ public class UserController {
            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
        }
    }
+
+   @PostMapping("/comment/create/{postId}")
+   public ResponseEntity<CommentDto> createComment(@PathVariable int postId, @RequestBody CommentDto commentDto) {
+       Comment createdComment = userService.createComment(postId, commentDto);
+       CommentDto createdCommentDto = convertToDto(createdComment);
+       return ResponseEntity.ok(createdCommentDto);
+   }
+
+   @PutMapping("/comment/update/{commentId}")
+   public ResponseEntity<CommentDto> updateComment(@PathVariable int commentId, @RequestBody CommentDto commentDto) {
+       Comment updatedComment = userService.updateComment(commentId, commentDto);
+       CommentDto updatedCommentDto = convertToDto(updatedComment);
+       return ResponseEntity.ok(updatedCommentDto);
+   }
+
+   @DeleteMapping("/comment/delete/{commentId}")
+   public ResponseEntity<String> deleteComment(@PathVariable int commentId) {
+       userService.deleteComment(commentId);
+       return ResponseEntity.ok("Comment deleted successfully");
+   }
+
+   @GetMapping("/comments/{postId}")
+   public ResponseEntity<List<CommentDto>> getCommentsByPostId(@PathVariable int postId) {
+       List<CommentDto> comments = userService.getCommentsByPostId(postId);
+       return ResponseEntity.ok(comments);
+   }
+
+   private CommentDto convertToDto(Comment comment) {
+    CommentDto commentDto = new CommentDto();
+    commentDto.setCommentId(comment.getCommentId());
+    commentDto.setPostId(comment.getPost().getPostId());
+    commentDto.setUserId(comment.getUserId());
+    commentDto.setUsername(comment.getUsername());
+    commentDto.setDateTime(comment.getDateTime());
+    commentDto.setContent(comment.getContent());
+    commentDto.setLikes(comment.getLikes()); 
+    return commentDto;
+    }
+
+    @GetMapping("/username/{userId}")
+    public ResponseEntity<String> getUsernameByUserId(@PathVariable int userId) {
+        try {
+            String username = userService.getUsernameByUserId(userId);
+            return ResponseEntity.ok(username);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error fetching username: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/comment/like/{commentId}")
+    public ResponseEntity<String> likeComment(@PathVariable int commentId) {
+        try {
+            userService.likeComment(commentId);
+            return ResponseEntity.ok("Comment liked successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error liking comment: " + e.getMessage());
+        }
+    }
+
+
 }

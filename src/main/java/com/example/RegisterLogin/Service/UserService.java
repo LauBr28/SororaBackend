@@ -6,6 +6,7 @@ import com.example.RegisterLogin.Dto.CommentDto;
 import com.example.RegisterLogin.Dto.LoginDto;
 import com.example.RegisterLogin.Dto.UserDto;
 import com.example.RegisterLogin.Dto.UserProfileDto;
+import com.example.RegisterLogin.Entity.Comment;
 import com.example.RegisterLogin.Entity.FriendRequest;
 import com.example.RegisterLogin.Entity.Mapa;
 import com.example.RegisterLogin.Dto.MapaDto;
@@ -28,7 +29,6 @@ public interface UserService {
 
     PostDTO createPost(PostDTO postDto); // Método para crear un nuevo post
     List<PostDTO> getAllPosts(); // Método para obtener todos los posts
-    void addCommentToPost(int postId, CommentDto commentDto); // Método para agregar un comentario a un post
     void likePost(int postId);
 
      // Método para actualizar un post existente
@@ -38,7 +38,17 @@ public interface UserService {
      void deletePost(int postId);
      PostDTO getPostById(int postId);
 
+    // Métodos para comentarios
+    Comment createComment(int postId, CommentDto commentDto);
+    Comment updateComment(int commentId, CommentDto commentDto);
+    void deleteComment(int commentId);
+    List<CommentDto> getCommentsByPostId(int postId);
+
+     //Métodos solicitudes de amistad 
      Long sendFriendRequest(Long senderId, Long receiverId);
      void acceptFriendRequest(Long requestId);
      List<FriendRequest> getPendingFriendRequests(Long userId);
+
+     String getUsernameByUserId(int userId);
+     void likeComment(int commentId);
 }
